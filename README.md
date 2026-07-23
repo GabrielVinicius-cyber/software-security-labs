@@ -24,18 +24,81 @@ Establish the development environment, Git workflow, and project structure that 
 ---
 
 ## 🇧🇷 Status
-🚧 Em andamento — ambiente e estrutura concluídos; aplicação ainda não implementada.
+✅ Ambiente, estrutura e aplicação base concluídos.
 
 ## 🇺🇸 Status
-🚧 In Progress — environment and project structure completed; application not yet implemented.
+✅ Environment, structure, and base application completed.
 
 ---
-
 ## 🇧🇷 Como executar
-*(Será preenchido na Missão 3, quando a aplicação estiver implementada.)*
+
+1. Clone o repositório e entre na pasta do Lab-01:
+```bash
+   cd Lab-01-Flask
+```
+
+2. Crie e ative um ambiente virtual:
+```bash
+   python3 -m venv venv
+   source venv/bin/activate
+```
+
+3. Instale as dependências:
+```bash
+   pip install -r requirements.txt
+```
+
+4. Crie um arquivo `.env` na raiz com o seguinte conteúdo:
+
+```
+FLASK_ENV=development
+SECRET_KEY=sua-chave-secreta-aqui
+
+```
+5. Execute a aplicação:
+```bash
+   python run.py
+```
+
+6. Acesse no navegador ou via curl:
+```bash
+   curl http://127.0.0.1:5000/
+   curl http://127.0.0.1:5000/status
+```
 
 ## 🇺🇸 How to Run
-*(This section will be completed in Mission 3, once the application has been implemented.)*
+
+1. Clone the repository and enter the Lab-01 folder:
+```bash
+   cd Lab-01-Flask
+```
+
+2. Create and activate a virtual environment:
+```bash
+   python3 -m venv venv
+   source venv/bin/activate
+```
+
+3. Install dependencies:
+```bash
+   pip install -r requirements.txt
+```
+
+4. Create a `.env` file in the root with the following content:
+```
+FLASK_ENV=development
+SECRET_KEY=your-secret-key-here
+```
+5. Run the application:
+```bash
+   python run.py
+```
+
+6. Access it via browser or curl:
+```bash
+   curl http://127.0.0.1:5000/
+   curl http://127.0.0.1:5000/status
+```
 
 ---
 
