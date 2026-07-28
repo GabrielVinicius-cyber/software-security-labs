@@ -108,3 +108,57 @@ application's access control.
 ### Root cause
 Direct concatenation of user input into SQL command construction,
 without using parameters/prepared statements.
+
+---
+
+## 🇧🇷 Confirmação automatizada com sqlmap
+
+Usamos o `sqlmap` para validar de forma automatizada a vulnerabilidade
+já confirmada manualmente. A ferramenta identificou duas técnicas de
+exploração adicionais:
+
+- **Boolean-based blind**: permite inferir dados observando diferenças
+  na resposta (verdadeiro/falso), sem necessidade de ver o retorno
+  direto dos dados.
+- **Time-based blind**: técnica mais avançada, que injeta uma operação
+  pesada no banco (`RANDOMBLOB`) para forçar atraso na resposta quando
+  uma condição é verdadeira — permite extrair dados byte a byte mesmo
+  em aplicações que não mostram diferença visível na tela.
+
+Comando usado:
+```bash
+sqlmap -u "http://127.0.0.1:5001/login" --data="username=admin&password=teste" -p username --batch --ignore-code=401
+```
+
+**Observação importante:** foi necessário usar `--ignore-code=401`,
+porque nossa aplicação retorna HTTP 401 em login inválido, o que o
+sqlmap interpreta por padrão como uma barreira de autenticação HTTP,
+não como resposta normal da aplicação.
+
+Evidência completa: `logs/sqlmap_scan.log`
+
+## 🇺🇸 Automated confirmation with sqlmap
+
+We used `sqlmap` to automatically validate the vulnerability already
+confirmed manually. The tool identified two additional exploitation
+techniques:
+
+- **Boolean-based blind**: allows inferring data by observing
+  differences in the response (true/false), without needing to see the
+  data returned directly.
+- **Time-based blind**: a more advanced technique that injects a heavy
+  database operation (`RANDOMBLOB`) to force a delay in the response
+  when a condition is true — allows extracting data byte by byte even
+  in applications that show no visible difference on screen.
+
+Command used:
+```bash
+sqlmap -u "http://127.0.0.1:5001/login" --data="username=admin&password=teste" -p username --batch --ignore-code=401
+```
+
+**Important note:** `--ignore-code=401` was required, because our
+application returns HTTP 401 on invalid login, which sqlmap interprets
+by default as an HTTP authentication barrier, not a normal application
+response.
+
+Full evidence: `logs/sqlmap_scan.log`
