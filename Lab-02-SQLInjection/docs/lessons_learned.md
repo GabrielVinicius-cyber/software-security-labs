@@ -162,3 +162,66 @@ by default as an HTTP authentication barrier, not a normal application
 response.
 
 Full evidence: `logs/sqlmap_scan.log`
+
+---
+
+## 🇧🇷 Correção aplicada
+
+A vulnerabilidade foi corrigida em `src/fixed/app.py`, substituindo a
+concatenação de string por **prepared statements** (parameterized
+queries):
+
+```python
+# Antes (vulnerável)
+query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
+cursor.execute(query)
+
+# Depois (corrigido)
+query = "SELECT * FROM users WHERE username = ? AND password = ?"
+cursor.execute(query, (username, password))
+```
+
+### Por que a correção funciona
+Com `?` como placeholder, o driver do SQLite trata a entrada do usuário
+como **dado literal**, nunca como parte executável do comando SQL. A
+etapa de "montar a query" e a etapa de "inserir os valores" ficam
+completamente separadas — não existe mais concatenação de string
+alguma, então não há como o atacante alterar a estrutura da query.
+
+### Validação da correção
+- **Manual:** os dois payloads que bypassavam o login (`' OR '1'='1` e
+  `'--`) retornam corretamente HTTP 401 (login negado) na versão
+  corrigida.
+- **Automatizada (sqlmap):** com sessão limpa (`--flush-session`), o
+  sqlmap não identificou nenhum parâmetro injetável.
+  Evidência: `logs/sqlmap_fixed_validation.log`
+
+## 🇺🇸 Applied fix
+
+The vulnerability was fixed in `src/fixed/app.py`, replacing string
+concatenation with **prepared statements** (parameterized queries):
+
+```python
+# Before (vulnerable)
+query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
+cursor.execute(query)
+
+# After (fixed)
+query = "SELECT * FROM users WHERE username = ? AND password = ?"
+cursor.execute(query, (username, password))
+```
+
+### Why the fix works
+With `?` as a placeholder, the SQLite driver treats user input as
+**literal data**, never as executable SQL. The "build the query" step
+and the "insert the values" step are completely separated — there's no
+string concatenation at all anymore, so there's no way for an attacker
+to alter the query's structure.
+
+### Fix validation
+- **Manual:** both payloads that bypassed login (`' OR '1'='1` and
+  `'--`) now correctly return HTTP 401 (login denied) on the fixed
+  version.
+- **Automated (sqlmap):** with a clean session (`--flush-session`),
+  sqlmap identified no injectable parameters.
+  Evidence: `logs/sqlmap_fixed_validation.log`
