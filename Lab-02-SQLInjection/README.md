@@ -29,21 +29,93 @@ process.
 - pytest
 
 ---
-
 ## 🇧🇷 Status
-🚧 Em andamento — estrutura criada, aplicação ainda não implementada.
+✅ Laboratório completo — aplicação vulnerável, versão corrigida, testes
+automatizados e documentação da exploração, tudo implementado e validado.
+Para entender a falha e a correção em detalhes, veja `docs/lessons_learned.md`.
 
 ## 🇺🇸 Status
-🚧 In progress — structure created, application not yet implemented.
+✅ Complete lab — vulnerable application, fixed version, automated tests,
+and exploitation documentation, all implemented and validated. For a
+detailed explanation of the flaw and the fix, see `docs/lessons_learned.md`.
 
 ---
 
 ## 🇧🇷 Como executar
-*(Será preenchido quando a aplicação estiver implementada.)*
+
+1. Ative o ambiente virtual e instale as dependências:
+```bash
+   source venv/bin/activate
+   pip install -r requirements.txt
+```
+
+2. Inicialize o banco de dados com usuários de teste:
+```bash
+   python3 scripts/init_db.py
+```
+
+3. Rode a versão **vulnerável** (porta 5001):
+```bash
+   python3 src/vulnerable/app.py
+```
+
+4. Ou rode a versão **corrigida** (porta 5002), em outro terminal:
+```bash
+   python3 src/fixed/app.py
+```
+
+5. Teste um login legítimo:
+```bash
+   curl -X POST http://127.0.0.1:5001/login -d "username=admin&password=admin123"
+```
+
+6. Teste a exploração (só funciona na porta 5001, vulnerável):
+```bash
+   curl -X POST http://127.0.0.1:5001/login -d "username=admin'--&password=qualquercoisa"
+```
+
+7. Rode os testes automatizados:
+```bash
+   python3 -m pytest tests/ -v
+```
 
 ## 🇺🇸 How to Run
-*(Will be completed once the application is implemented.)*
 
+1. Activate the virtual environment and install dependencies:
+```bash
+   source venv/bin/activate
+   pip install -r requirements.txt
+```
+
+2. Initialize the database with test users:
+```bash
+   python3 scripts/init_db.py
+```
+
+3. Run the **vulnerable** version (port 5001):
+```bash
+   python3 src/vulnerable/app.py
+```
+
+4. Or run the **fixed** version (port 5002), in another terminal:
+```bash
+   python3 src/fixed/app.py
+```
+
+5. Test a legitimate login:
+```bash
+   curl -X POST http://127.0.0.1:5001/login -d "username=admin&password=admin123"
+```
+
+6. Test the exploit (only works on port 5001, vulnerable):
+```bash
+   curl -X POST http://127.0.0.1:5001/login -d "username=admin'--&password=qualquercoisa"
+```
+
+7. Run the automated tests:
+```bash
+   python3 -m pytest tests/ -v
+```
 ---
 
 ## 🇧🇷 Vulnerabilidades estudadas
