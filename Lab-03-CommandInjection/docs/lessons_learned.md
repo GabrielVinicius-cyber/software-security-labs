@@ -67,3 +67,48 @@ a complete infrastructure compromise. This reinforces why secure coding
 is not optional — and why defense in depth (multiple layers of
 protection, not just the code) is essential even when the code itself
 is correct.
+
+---
+
+## 🇧🇷 Prova de impacto — escrita arbitrária de arquivo
+
+Além de executar comandos de leitura (`whoami`, `id`, `uname -a`), foi
+demonstrado que a falha permite **escrita arbitrária no sistema de
+arquivos**, com conteúdo controlado pelo atacante:
+
+```bash
+curl -G "http://127.0.0.1:5003/ping" --data-urlencode "host=127.0.0.1; echo 'conteúdo malicioso' > /home/kali/arquivo.txt"
+```
+
+Isso comprova que o impacto de Command Injection vai além de
+reconhecimento (coleta de informação) — inclui manipulação real do
+sistema, o que poderia ser usado, em um cenário real, para persistência
+(ex: modificar arquivos de configuração, agendar tarefas via `cron`,
+adicionar chaves SSH).
+
+**Nota de responsabilidade:** o arquivo de prova foi criado e removido
+imediatamente após a validação, dentro de ambiente isolado e controlado.
+Nenhuma técnica de persistência real foi implementada — o objetivo foi
+apenas demonstrar a capacidade de escrita, suficiente para documentar
+o impacto da vulnerabilidade.
+
+## 🇺🇸 Proof of impact — arbitrary file write
+
+Beyond executing read commands (`whoami`, `id`, `uname -a`), it was
+demonstrated that the flaw allows **arbitrary file system writes**, with
+attacker-controlled content:
+
+```bash
+curl -G "http://127.0.0.1:5003/ping" --data-urlencode "host=127.0.0.1; echo 'malicious content' > /home/kali/file.txt"
+```
+
+This proves that Command Injection's impact goes beyond reconnaissance
+(information gathering) — it includes real system manipulation, which
+could be used, in a real scenario, for persistence (e.g. modifying
+configuration files, scheduling tasks via `cron`, adding SSH keys).
+
+**Responsibility note:** the proof file was created and immediately
+removed after validation, within an isolated and controlled
+environment. No real persistence technique was implemented — the goal
+was only to demonstrate write capability, sufficient to document the
+vulnerability's impact.
