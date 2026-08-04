@@ -112,3 +112,40 @@ removed after validation, within an isolated and controlled
 environment. No real persistence technique was implemented — the goal
 was only to demonstrate write capability, sufficient to document the
 vulnerability's impact.
+
+---
+
+## 🇧🇷 Interceptação com Burp Suite (extra)
+
+Como exercício adicional, a exploração foi repetida usando o Burp Suite
+Community como proxy interceptador, configurando o `curl` para rotear
+a requisição através dele (`curl -x http://127.0.0.1:8080 ...`).
+
+Isso permitiu editar manualmente a requisição HTTP antes do envio,
+diretamente na interface do Burp — incluindo o payload de injeção na
+query string.
+
+### Lição técnica: URL Encoding
+Ao editar a requisição manualmente, foi necessário codificar espaços
+como `%20` (URL encoding), já que a primeira linha de uma requisição
+HTTP (`MÉTODO CAMINHO VERSÃO`) não aceita espaços não codificados sem
+quebrar a sintaxe. O Flask/Werkzeug decodifica isso automaticamente ao
+processar a requisição, entregando o valor já com espaços normais para
+a aplicação.
+
+## 🇺🇸 Interception with Burp Suite (extra)
+
+As an additional exercise, the exploitation was repeated using Burp
+Suite Community as an intercepting proxy, configuring `curl` to route
+the request through it (`curl -x http://127.0.0.1:8080 ...`).
+
+This allowed manually editing the HTTP request before sending it,
+directly in the Burp interface — including the injection payload in
+the query string.
+
+### Technical lesson: URL Encoding
+When manually editing the request, spaces had to be encoded as `%20`
+(URL encoding), since the HTTP request line (`METHOD PATH VERSION`)
+doesn't accept unencoded spaces without breaking the syntax. Flask/
+Werkzeug automatically decodes this when processing the request,
+delivering the value with normal spaces to the application.
